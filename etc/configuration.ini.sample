@@ -1,0 +1,10 @@
+[photobackup]
+# Need to be written by www-data
+mediaroot = /opt/backup/mobile/photobackup
+# Password should be a sha512...
+# if you do not know, use the following for the really bad password toto: echo -n "toto" | sha512sum 
+password = <YourSHA512Key>
+port = 8240
+debug = True
+root_url = /photobackup
+allowed_extention = ['.jpg', '.jpeg', '.mp4']           
