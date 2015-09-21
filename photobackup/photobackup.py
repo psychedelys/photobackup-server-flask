@@ -211,14 +211,16 @@ def save_image(username, domain):
     debug("ok: using folder '%s'." % filedir)
 
     filepath = os.path.join(filedir, filename)
-    if not os.path.exists(filedir):
+    if not os.path.isdir(filedir):
+        debug("Need to create folder %s on system." % (filedir))
         try:
             os.makedirs(filedir)
         except Exception as e:
+            debug("error: Cannot create folder %s" % str(e))
             end(400, "oups, cannot create directory '%s'." % (str(e)))
 
-    if not os.path.exists(filepath):
-        debug("Storing file on system.")
+    if not os.path.isfile(filepath):
+        debug("Storing file %s on system." % (filepath))
         filesize = -1
         try:
             filesize = int(request.form.get('filesize'))
