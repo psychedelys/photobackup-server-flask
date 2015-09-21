@@ -48,10 +48,10 @@ On Debian, you need to install the following dependancies:
 
 * Run-it using uwsgi with Nginx in front
 
-    cp contrib/nginx/photobackup /etc/nginx/sites-available/
-    ln -s /etc/nginx/sites-available/photobackup /etc/nginx/sites-enabled/
-    cp contrib/uwsgi/photobackup.ini /etc/uwsgi/apps-available/
-    ln -s /etc/uwsgi/apps-available/photobackup.ini /etc/uwsgi/apps-enabled/
+    * cp contrib/nginx/photobackup /etc/nginx/sites-available/
+    * ln -s /etc/nginx/sites-available/photobackup /etc/nginx/sites-enabled/
+    * cp contrib/uwsgi/photobackup.ini /etc/uwsgi/apps-available/
+    * ln -s /etc/uwsgi/apps-available/photobackup.ini /etc/uwsgi/apps-enabled/
 
 * Manual testing of uwsgi:
 
