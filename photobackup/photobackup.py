@@ -49,8 +49,8 @@ def read_config():
     config = configparser.ConfigParser()
     try:
         config.read_file(open(cfg_file))
-    except OSError:
-        error("can't read configuration file %s." % (cfg_file))
+    except OSError as e:
+        error("can't read configuration file %s. %s." % (cfg_file, str(e)))
 
     # Check if all keys are in the file
     keys = ['MediaRoot', 'Password', 'Port', 'Debug', 'Root_URL', 'Allowed_Extention']
@@ -222,7 +222,7 @@ def save_image(username, domain):
         filesize = -1
         try:
             filesize = int(request.form.get('filesize'))
-        except TypeError:
+        except TypeError as e:
             debug("error: %s" % str(e))
             end(400, "missing file size in the request!")
         except Exception as e:
@@ -246,7 +246,7 @@ def save_image(username, domain):
         filesize = -1
         try:
             filesize = int(request.form.get('filesize'))
-        except TypeError:
+        except TypeError as e:
             debug("error: %s" % str(e))
             end(400, "missing file size in the request!")
         except Exception as e:
@@ -263,9 +263,10 @@ def save_image(username, domain):
         return ('', 200)
 
 
-@app.route(root_url + '/test', methods=['POST'])
-@app.route(root_url + '/<username>@<domain>/<test>', methods=['POST'])
-def test():
+@app.route(root_url + '/<test>', methods=['POST'])
+@app.route(root_url + '/<username>@<domain>/<test>', methods=['POST'], strict_slashes=False)
+def test(username, domain, test):
+    debug("got a POST call is param test.")
     if test is not None and test == 'test':
         debug("got a POST test call.")
         app.logger.debug('Query:'+pp.pformat(request))
@@ -275,19 +276,23 @@ def test():
             end(403, "wrong password!")
 
         if not os.path.exists(config['MediaRoot']):
+            debug("ERROR: MEDIA_ROOT does not exist!")
             end(500, "MEDIA_ROOT does not exist!")
 
         testfile = os.path.join(config['MediaRoot'], '.test_file_to_write')
+        debug("testfile is %s" % (testfile))
         try:
             with open(testfile, 'w') as tf:
                 tf.write('')
-        except:
+        except Exception as e:
+            debug("ERROR: Can't write to MEDIA_ROOT: %s" % str(e))
             end(500, "Can't write to MEDIA_ROOT!")
         finally:
             os.remove(testfile)
             debug("Test succeeded \o/")
             return ('', 200)
     else:
+        debug("ERROR: Bad call, parameter not supported '%s'." % (test))
         end(500, "Bad call!")
 
 
