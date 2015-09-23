@@ -139,7 +139,7 @@ def save_image(username, domain):
 
     debug("ok: file do not contains more than 1 dot.")
     # Prevent uploading from unwanted file which can be used for injection
-    extension = os.path.splitext(filename)[1]
+    extension = os.path.splitext(filename)[1].lower()
     if extension not in allowed_extention:
         error("file extension NOT allowed '%s'." % extension)
         debug("error: allowed %s." % (pp.pformat(allowed_extention)))
